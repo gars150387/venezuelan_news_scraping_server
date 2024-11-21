@@ -1,9 +1,8 @@
-import express from "express";
-import portuguesaReporta from "./router/portuguesa_report.mjs";
-import { configDotenv } from "dotenv";
-import periodicoOccidente from "./router/periodico_occidente.mjs";
+const express = require("express");
+// const cors = require("cors");
+const portuguesaReporta = require("./router/portuguesa_report.js");
+const periodicoOccidente = require("./router/periodico_occidente.js");
 
-configDotenv(".env");
 // CORS configuration
 const ACCEPTED_ORIGINS = [];
 

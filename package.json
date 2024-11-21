@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "scraping news website to collect political information about venezuela",
   "main": "index.mjs",
-  "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
