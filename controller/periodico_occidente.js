@@ -32,20 +32,17 @@ const main = async (request, response) => {
           .from("noticia")
           .select("*")
           .eq("url", url);
-        console.log("data");
         if (data.length > 0) {
-          console.log("Existing data found", data);
           continue;
         } else {
           // Optionally insert into Supabase
-          await supabase.from("noticia").insert({
+          return await supabase.from("noticia").insert({
             title: title,
             content: content,
             url: url,
           });
         }
       }
-      continue;
     }
 
     // Close the browser
