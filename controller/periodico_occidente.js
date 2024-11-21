@@ -33,6 +33,7 @@ const main = async (request, response) => {
           .select("*")
           .eq("url", url);
         if (data.length > 0) {
+          console.log(data)
           continue;
         } else {
           // Optionally insert into Supabase
@@ -42,6 +43,8 @@ const main = async (request, response) => {
             url: url,
           });
         }
+      } else {
+        continue
       }
     }
 
