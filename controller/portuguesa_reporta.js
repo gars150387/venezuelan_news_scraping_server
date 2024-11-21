@@ -1,5 +1,5 @@
 const url = "https://portuguesareporta.com/regionales/";
-const chromium = require("playwright");
+const {chromium} = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
 configDotenv(".env");
