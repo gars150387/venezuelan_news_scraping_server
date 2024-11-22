@@ -82,5 +82,5 @@ const main = async (request, response) => {
     response.status(500).json({ message: "error", error: error.message });
   }
 };
-main();
-// module.exports = main;
+// main();
+module.exports = main;
