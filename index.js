@@ -2,6 +2,8 @@ const express = require("express");
 // const cors = require("cors");
 const portuguesaReporta = require("./router/portuguesa_report.js");
 const periodicoOccidente = require("./router/periodico_occidente.js");
+const cnnEspanol = require("./router/cnnEspanol.js");
+const elNacionalController = require("./router/el_nacional.js");
 
 // CORS configuration
 const ACCEPTED_ORIGINS = [];
@@ -37,6 +39,8 @@ app.use(express.json({ limit: "1mb" }));
 
 app.use("/api/portuguesa_reporta_", portuguesaReporta());
 app.use("/api/periodico_occidente_", periodicoOccidente());
+app.use("/api/cnn_espanol_", cnnEspanol());
+app.use("/api/el_nacional_", elNacionalController());
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Started in port:${port}`));
