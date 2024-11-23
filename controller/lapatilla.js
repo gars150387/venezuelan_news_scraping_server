@@ -1,4 +1,4 @@
-const url = "https://www.elnacional.com/politica/";
+const url = "https://www.lapatilla.com/secciones/politica/";
 const { chromium } = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
@@ -8,7 +8,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const main = async (request, response) => {
-  const maxRetries = 3; // Maximum number of retries
+  const maxRetries = 6; // Maximum number of retries
   const retryDelay = 5000; // Delay between retries in milliseconds
   try {
     const browser = await chromium.launch({ headless: true });
@@ -30,9 +30,9 @@ const main = async (request, response) => {
       }
     }
     if (navigationSuccessful) {
-      const articles = await page.$$(".article");
+      const articles = await page.$$(".row");
       for (const article of articles) {
-        const articleUrl = await article.$eval(".title a", (el) => el.href);
+        const articleUrl = await article.$eval("a", (el) => el.href);
         if (articleUrl) {
           const newPage = await browser.newPage();
           let articleNavigationSuccessful = false;
@@ -54,26 +54,32 @@ const main = async (request, response) => {
 
           if (articleNavigationSuccessful) {
             const title = await newPage.$eval(
-              ".title h1",
+              ".entry-header h1",
               (element) => element.innerText
             );
             const content = await newPage.$$eval(
-              ".title .extract",
+              ".entry-content p",
               (elements) => elements.map((el) => el.innerText).join("\n")
             );
-            const { data } = await supabase
-              .from("noticia")
-              .select("*")
-              .eq("url", articleUrl);
-            if (data.length === 0) {
-              await supabase.from("noticia").insert({
-                title: title,
-                content: content,
-                url: articleUrl,
-                location: "dc_caracas",
-                type: "article",
-              });
-            }
+            console.log({
+              title: title,
+              content: content,
+              url: articleUrl,
+              location: "digital_digital",
+              type: "article",
+            });
+            // const { data } = await supabase
+            //   .from("noticia")
+            //   .select("*")
+            //   .eq("url", articleUrl);
+            // if (data.length === 0) {
+            //   await supabase.from("noticia").insert({
+            //     title: title,
+            //     content: content,
+            //     url: articleUrl,
+            //     location: "dc_caracas",
+            //   });
+            // }
           }
           await newPage.close();
         }
@@ -89,5 +95,5 @@ const main = async (request, response) => {
     response.status(500).json({ message: "error", error: error.message });
   }
 };
-// main();
-module.exports = main;
+main();
+// module.exports = main;

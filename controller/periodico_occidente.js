@@ -32,16 +32,14 @@ const main = async (request, response) => {
           .from("noticia")
           .select("*")
           .eq("url", url);
-        if (data.length > 0) {
-          console.log(data);
-          continue;
-        } else {
+        if (data.length === 0) {
           // Optionally insert into Supabase
           return await supabase.from("noticia").insert({
             title: title,
             content: content,
             url: url,
             location: "portuguesa_acarigua",
+            type: "article",
           });
         }
       } else {

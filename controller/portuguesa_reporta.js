@@ -31,15 +31,14 @@ const main = async (request, response) => {
           .from("noticia")
           .select("*")
           .eq("url", url);
-        if (data.length > 0) {
-          continue;
-        } else {
+        if (data.length === 0) {
           // Optionally insert into Supabase
           await supabase.from("noticia").insert({
             title: titles,
             content: content,
             url: url,
             location: "portuguesa_acarigua",
+            type: "article",
           });
         }
       }

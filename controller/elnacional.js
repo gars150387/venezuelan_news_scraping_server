@@ -71,6 +71,7 @@ const main = async (request, response) => {
                 content: content,
                 url: articleUrl,
                 location: "dc_caracas",
+                type: "article",
               });
             }
           }
