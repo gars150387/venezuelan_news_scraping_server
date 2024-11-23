@@ -1,5 +1,5 @@
 const url = "https://portuguesareporta.com/regionales/";
-const {chromium} = require("playwright");
+const { chromium } = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
 configDotenv(".env");
@@ -39,14 +39,17 @@ const main = async (request, response) => {
             title: titles,
             content: content,
             url: url,
+            location: "portuguesa_acarigua",
           });
         }
       }
-      continue
+      continue;
     }
     // Close the browser
     await browser.close();
-    response.json({ message: "Thank you for helping me to collect news about my country." });
+    response.json({
+      message: "Thank you for helping me to collect news about my country.",
+    });
   } catch (error) {
     console.log(error);
     response.status(500).json({ message: "error", error: error });

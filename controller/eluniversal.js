@@ -8,7 +8,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const main = async (request, response) => {
-  const maxRetries = 6; // Maximum number of retries
+  const maxRetries = 3; // Maximum number of retries
   const retryDelay = 5000; // Delay between retries in milliseconds
   try {
     const browser = await chromium.launch({ headless: true });

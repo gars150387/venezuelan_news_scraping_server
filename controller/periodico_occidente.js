@@ -1,5 +1,5 @@
 const url = "https://elperiodicodeoccidente.com/portuguesa";
-const {chromium} = require("playwright");
+const { chromium } = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
 configDotenv(".env");
@@ -33,7 +33,7 @@ const main = async (request, response) => {
           .select("*")
           .eq("url", url);
         if (data.length > 0) {
-          console.log(data)
+          console.log(data);
           continue;
         } else {
           // Optionally insert into Supabase
@@ -41,10 +41,11 @@ const main = async (request, response) => {
             title: title,
             content: content,
             url: url,
+            location: "portuguesa_acarigua",
           });
         }
       } else {
-        continue
+        continue;
       }
     }
 

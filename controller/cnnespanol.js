@@ -42,6 +42,7 @@ const main = async (request, response) => {
             title: title,
             content: content,
             url: url,
+            location:"united_states_united_states"
           });
         }
       } 
