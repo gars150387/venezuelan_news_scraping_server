@@ -56,7 +56,7 @@ const main = async (request, response) => {
             title: title,
             content: '',
             url: articleUrl,
-            location: "dc_caracas",
+            location: "digital_youtube",
           });
         }
       }

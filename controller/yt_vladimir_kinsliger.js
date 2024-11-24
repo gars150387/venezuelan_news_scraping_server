@@ -54,22 +54,23 @@ const main = async (request, response) => {
         if (data.length === 0) {
           await supabase.from("noticia").insert({
             title: title,
-            content: '',
+            content: "",
             url: articleUrl,
-            location: "dc_caracas",
+            location: "digital_youtube",
+            type: "video",
           });
         }
       }
     }
     await browser.close();
     const responseTemplate = {
-      ok:true,
+      ok: true,
       message: "Thank you for helping me to collect news about my country.",
     };
     response.send({
       statusCode: 200,
       body: JSON.stringify(responseTemplate),
-    })
+    });
   } catch (error) {
     console.log(error);
     response.send({
