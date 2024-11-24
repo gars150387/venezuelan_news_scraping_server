@@ -49,12 +49,24 @@ const main = async (request, response) => {
 
     // Close the browser
     await browser.close();
-    response.json({
+    const responseTemplate = {
+      ok:true,
       message: "Thank you for helping me to collect news about my country.",
-    });
+    };
+    response.send({
+      statusCode: 200,
+      body: JSON.stringify(responseTemplate),
+    })
   } catch (error) {
     console.log(error);
-    response.status(500).json({ message: "error", error: error });
+    response.send({
+      statusCode: 500,
+      body: JSON.stringify({
+        ok: false,
+        message: "error",
+        error: error.message,
+      }),
+    });
   }
 };
 
