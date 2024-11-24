@@ -54,7 +54,7 @@ const main = async (request, response) => {
         if (data.length === 0) {
           await supabase.from("noticia").insert({
             title: title,
-            content: content,
+            content: '',
             url: articleUrl,
             location: "dc_caracas",
           });
