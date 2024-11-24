@@ -1,6 +1,5 @@
 const url = "https://www.youtube.com/@carlaangolaoficial/videos";
 const { chromium } = require("playwright");
-const { response } = require("express");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
 configDotenv(".env");
@@ -8,7 +7,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const main = async (request, response = response) => {
+const main = async (request, response) => {
   const maxRetries = 6; // Maximum number of retries
   const retryDelay = 5000; // Delay between retries in milliseconds
   try {
@@ -41,6 +40,13 @@ const main = async (request, response = response) => {
           "#details yt-formatted-string",
           (el) => el.innerText
         );
+        console.log({
+          title: title,
+          content: '',
+          url: articleUrl,
+          location: "digital_youtube",
+          type: "video",
+        })
         const { data } = await supabase
           .from("noticia")
           .select("*")
@@ -48,7 +54,7 @@ const main = async (request, response = response) => {
         if (data.length === 0) {
           await supabase.from("noticia").insert({
             title: title,
-            content: content,
+            content: '',
             url: articleUrl,
             location: "dc_caracas",
           });
@@ -60,13 +66,13 @@ const main = async (request, response = response) => {
       ok:true,
       message: "Thank you for helping me to collect news about my country.",
     };
-    response.json({
+    response.send({
       statusCode: 200,
       body: JSON.stringify(responseTemplate),
     })
   } catch (error) {
     console.log(error);
-    response.json({
+    response.send({
       statusCode: 500,
       body: JSON.stringify({
         ok: false,
@@ -76,4 +82,5 @@ const main = async (request, response = response) => {
     });
   }
 };
+// main();
 module.exports = main;
