@@ -9,9 +9,9 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const main = async (request, response) => {
   try {
-    const browser = await chromium.launch({ headless: true }); // Set to false if you want to see the browser window
+    const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
-    await page.goto(url);
+    await page.goto(url, { timeout: 60000 });
     const articles = await page.$$(".post");
     for (const article of articles) {
       const url = await article.$eval(".column h2 a", (el) => el.href);
@@ -40,10 +40,25 @@ const main = async (request, response) => {
             url: url,
             location: "portuguesa_acarigua",
             type: "article",
+            owner:"periodico_occidente",
           });
         }
       } else {
-        continue;
+        const ownerFound = "periodico_occidente";
+        if (!data[0].owner) {
+          await supabase
+            .from("noticia")
+            .update({
+              owner: ownerFound,
+              type: "article",
+            })
+            .eq("url", url);
+        } else if (data[0].owner === "") {
+          await supabase.from("noticia").update({
+            owner: ownerFound,
+            type: "article",
+          });
+        }
       }
     }
 

@@ -13,6 +13,7 @@ const main = async (request, response) => {
   try {
     const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
+    await page.goto(url, { timeout: 60000 });
     let navigationSuccessful = false;
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {

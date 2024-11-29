@@ -9,16 +9,33 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const main = async (request, response) => {
-  try {
-    const browser = await chromium.launch({ headless: true }); // Set to false if you want to see the browser window
+  const maxRetries = 6; // Maximum number of retries
+  const retryDelay = 5000; // Delay between retries in milliseconds
+ try {
+    const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
-    await page.goto(url);
+    await page.goto(url, { timeout: 60000 });
+    let navigationSuccessful = false;
     const articles = await page.$$("article");
     for (const article of articles) {
       const url = await article.$eval("a", (el) => el.href);
-      if (url) {
+       for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          await page.goto(url, { timeout: 30000 }); // Set timeout to 30 seconds
+          navigationSuccessful = true;
+          break; // Exit loop if navigation is successful
+        } catch (error) {
+          if (attempt < maxRetries) {
+            await page.waitForTimeout(retryDelay);
+          } else {
+            throw new Error(
+              `Failed to navigate to ${url} after ${maxRetries} attempts`
+            );
+          }
+        }
+      }
+      if (navigationSuccessful) {
         const new_page = await browser.newPage();
-        await new_page.goto(url);
         const titles = await new_page.$eval(
           "header h1",
           (elements) => elements.innerText
@@ -39,21 +56,21 @@ const main = async (request, response) => {
             url: url,
             location: "portuguesa_acarigua",
             type: "article",
+            owner: "portuguesa_report",
           });
         }
       }
-      continue;
     }
     // Close the browser
     await browser.close();
     const responseTemplate = {
-      ok:true,
+      ok: true,
       message: "Thank you for helping me to collect news about my country.",
     };
-    response.send({
+    return response.send({
       statusCode: 200,
       body: JSON.stringify(responseTemplate),
-    })
+    });
   } catch (error) {
     console.log(error);
     response.send({

@@ -1,4 +1,3 @@
-const url = "https://www.youtube.com/@carlaangolaoficial/videos";
 const { chromium } = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
@@ -8,6 +7,8 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const main = async (request, response) => {
+  const searchUrl = request._parsedOriginalUrl.query
+  const url = searchUrl;
   const maxRetries = 6; // Maximum number of retries
   const retryDelay = 5000; // Delay between retries in milliseconds
   try {
@@ -40,13 +41,6 @@ const main = async (request, response) => {
           "#details yt-formatted-string",
           (el) => el.innerText
         );
-        console.log({
-          title: title,
-          content: '',
-          url: articleUrl,
-          location: "digital_youtube",
-          type: "video",
-        })
         const { data } = await supabase
           .from("noticia")
           .select("*")
@@ -54,22 +48,40 @@ const main = async (request, response) => {
         if (data.length === 0) {
           await supabase.from("noticia").insert({
             title: title,
-            content: '',
+            content: "",
             url: articleUrl,
             location: "digital_youtube",
+            type: "video",
+            owner: String(url).split("/")[3],
           });
+        } else {
+          const ownerFound = String(url).split("/")[3];
+          if (!data[0].owner) {
+            await supabase
+              .from("noticia")
+              .update({
+                owner: ownerFound,
+                type: "video",
+              })
+              .eq("url", articleUrl);
+          } else if (data[0].owner === "") {
+            await supabase.from("noticia").update({
+              owner: ownerFound,
+              type: "video",
+            });
+          }
         }
       }
     }
     await browser.close();
     const responseTemplate = {
-      ok:true,
+      ok: true,
       message: "Thank you for helping me to collect news about my country.",
     };
     response.send({
       statusCode: 200,
       body: JSON.stringify(responseTemplate),
-    })
+    });
   } catch (error) {
     console.log(error);
     response.send({

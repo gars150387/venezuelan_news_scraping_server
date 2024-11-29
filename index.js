@@ -9,6 +9,9 @@ const melanioEscobarController = require("./router/melanioEscobar.js");
 const patriciaPoleoController = require("./router/patriciaPoleo.js");
 const sergioNovelliController = require("./router/sergioNovelli.js");
 const vladimirKinsligerController = require("./router/vladimirKinsliger.js");
+const miguelContogController = require("./router/miguel_contigo.js");
+const elPitazoController = require("./router/elpitazo.js");
+const orlandoUrdanetaController = require("./router/orlando_urdaneta.js");
 
 // CORS configuration
 const ACCEPTED_ORIGINS = [];
@@ -51,6 +54,9 @@ app.use("/api/melanio_escobar_", melanioEscobarController());
 app.use("/api/patricia_poleo_", patriciaPoleoController());
 app.use("/api/sergio_novelli_", sergioNovelliController());
 app.use("/api/vladimir_kinsliger_", vladimirKinsligerController());
+app.use("/api/miguel_contigo_", miguelContogController());
+app.use("/api/el_pitazo_", elPitazoController());
+app.use("/api/orlando_urdaneta_", orlandoUrdanetaController());
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Started in port:${port}`));

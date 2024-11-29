@@ -47,11 +47,28 @@ const main = async (request, response) => {
         if (data.length === 0) {
           await supabase.from("noticia").insert({
             title: title,
-            content: '',
+            content: "",
             url: articleUrl,
-            location: "digital_youtube",          type: "video",
-
+            location: "digital_youtube",
+            type: "video",
+            owner: String(url).split("/")[3],
           });
+        } else {
+          const ownerFound = String(url).split("/")[3];
+          if (!data[0].owner) {
+            await supabase
+              .from("noticia")
+              .update({
+                owner: ownerFound,
+                type: "video",
+              })
+              .eq("url", articleUrl);
+          } else if (data[0].owner === "") {
+            await supabase.from("noticia").update({
+              owner: ownerFound,
+              type: "video",
+            });
+          }
         }
       }
     }

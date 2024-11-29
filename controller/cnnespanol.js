@@ -43,7 +43,8 @@ const main = async (request, response) => {
             content: content,
             url: url,
             location:"united_states_united_states",
-            type:"article"
+            type:"article",
+            owner:"cnn_espanol"
           });
         }
       } 

@@ -1,4 +1,4 @@
-const url = "https://www.youtube.com/@FactoresDePoder/videos";
+const url = "https://www.youtube.com/@ElPitazo";
 const { chromium } = require("playwright");
 const { createClient } = require("@supabase/supabase-js");
 const { configDotenv } = require("dotenv");
@@ -41,12 +41,12 @@ const main = async (request, response) => {
           (el) => el.innerText
         );
         // console.log({
-        //     title: title,
-        //     content: "",
-        //     url: articleUrl,
-        //     location: "digital_youtube",
-        //     type: "video",
-        // })
+        //   title: title,
+        //   content: "",
+        //   url: articleUrl,
+        //   location: "digital_youtube",
+        //   type: "video",
+        // });
         const { data } = await supabase
           .from("noticia")
           .select("*")
@@ -81,13 +81,13 @@ const main = async (request, response) => {
     }
     await browser.close();
     const responseTemplate = {
-      ok:true,
+      ok: true,
       message: "Thank you for helping me to collect news about my country.",
     };
     response.send({
       statusCode: 200,
       body: JSON.stringify(responseTemplate),
-    })
+    });
   } catch (error) {
     console.log(error);
     response.send({
