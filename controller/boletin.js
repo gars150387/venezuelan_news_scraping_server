@@ -18,7 +18,8 @@ const main = async (request, response) => {
     const articles = await page.$$(
       "div.transparent.h-full.cursor-pointer.overflow-hidden.rounded-lg.flex.flex-col.border"
     );
-    for (const article of articles) {
+    for (let index = articles.length - 1; index >= 0; index--) {
+      const article = articles[index];
       const newUrl = await article.$eval("a", (el) => el.href);
       const newPage = await browser.newPage();
       await newPage.goto(newUrl, { timeout: 30000 });
@@ -26,14 +27,6 @@ const main = async (request, response) => {
       const content = await newPage.$$eval("#content-blocks p", (elements) =>
         elements.map((el) => el.innerText).join("\n")
       );
-      console.log("scrapped page content", {
-        title: title,
-        content: content,
-        url: newUrl,
-        location: "digital_boletin",
-        type: "boletin",
-        owner: "maria_corina_boletin",
-      });
       const { data } = await supabase
         .from("noticia")
         .select("*")
@@ -45,7 +38,7 @@ const main = async (request, response) => {
           url: newUrl,
           location: "digital_boletin",
           type: "boletin",
-          owner: "maria_corina_boletin",
+          owner: "boletin_maria_corina",
         });
       }
     }
