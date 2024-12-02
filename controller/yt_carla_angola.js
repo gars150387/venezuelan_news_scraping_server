@@ -7,7 +7,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const main = async (request, response) => {
-  const searchUrl = request._parsedOriginalUrl.query
+  const searchUrl = request._parsedOriginalUrl.query;
   const url = searchUrl;
   const maxRetries = 6; // Maximum number of retries
   const retryDelay = 5000; // Delay between retries in milliseconds
@@ -54,22 +54,6 @@ const main = async (request, response) => {
             type: "video",
             owner: String(url).split("/")[3],
           });
-        } else {
-          const ownerFound = String(url).split("/")[3];
-          if (!data[0].owner) {
-            await supabase
-              .from("noticia")
-              .update({
-                owner: ownerFound,
-                type: "video",
-              })
-              .eq("url", articleUrl);
-          } else if (data[0].owner === "") {
-            await supabase.from("noticia").update({
-              owner: ownerFound,
-              type: "video",
-            });
-          }
         }
       }
     }
